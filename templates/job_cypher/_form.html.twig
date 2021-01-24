@@ -1,0 +1,60 @@
+<style>
+    .button {
+        background-color: #009879;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: 100%;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            {{ form_start(form) }}
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"> Šifras</span>
+                </div>
+                {{ form_widget(form.cypher, {'aria-describedby':'basic-addon1'} ) }}
+            </div>
+
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon2">Pavadinimas</span>
+                </div>
+                {{ form_widget(form.name, {'aria-describedby':'basic-addon2'} ) }}
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">Matavimo vnt.</span>
+                </div>
+                {{ form_widget(form.measurement, {'aria-describedby':'basic-addon3'} ) }}
+            </div>
+
+
+            <button class="button">{{ button_label|default('Pridėti') }}</button>
+
+            {{ form_end(form) }}
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{% endblock %}

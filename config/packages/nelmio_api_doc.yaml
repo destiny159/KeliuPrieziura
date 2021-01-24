@@ -1,0 +1,10 @@
+# config/packages/nelmio_api_doc.yaml
+nelmio_api_doc:
+  documentation:
+    info:
+      title: Information System
+      description:
+      version: 1.0.0
+  areas: # to filter documented areas
+    path_patterns:
+      - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

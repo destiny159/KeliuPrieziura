@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <style>
+        .button {
+            background-color: #009879;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
+                {{ form_start(form) }}
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Kelio nr.</span>
+                    </div>
+                    {{ form_widget(form.roadNumber, {'aria-describedby':'basic-addon1'} ) }}
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">Kelio pavadinimas</span>
+                    </div>
+                    {{ form_widget(form.roadName, {'aria-describedby':'basic-addon2'} ) }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Pradžia</span>
+                            </div>
+                            {{ form_widget(form.roadStart, { 'type':'number', 'aria-describedby':'basic-addon3', 'step':'0.001'}) }}
+
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon4">Pabaiga</span>
+                            </div>
+                            {{ form_widget(form.roadFinish, {'type':'number', 'aria-describedby':'basic-addon4', 'step':'0.001'} ) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon5">Kelio lygis</span>
+                    </div>
+                    {{ form_widget(form.roadLevel, {'type':'number', 'aria-describedby':'basic-addon5'} ) }}
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon6">Kelio tipas</span>
+                    </div>
+                    {{ form_widget(form.roadType, {'aria-describedby':'basic-addon6'} ) }}
+                </div>
+
+
+                <button class="button">{{ button_label|default('Pridėti') }}</button>
+
+                {{ form_end(form) }}
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+    </div>
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#road_section_roadStart").attr('step', '0.001');
+            $("#road_section_roadFinish").attr('step', '0.001');
+        });
+
+
+    </script>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{% endblock %}
+
+

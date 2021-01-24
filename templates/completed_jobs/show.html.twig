@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CompletedJobs{% endblock %}
+
+{% block body %}
+    <h1>CompletedJobs</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ completed_job.id }}</td>
+            </tr>
+            <tr>
+                <th>JobCypher</th>
+                <td>{{ completed_job.jobCypher }}</td>
+            </tr>
+            <tr>
+                <th>JobName</th>
+                <td>{{ completed_job.jobName }}</td>
+            </tr>
+            <tr>
+                <th>RoadName</th>
+                <td>{{ completed_job.roadName }}</td>
+            </tr>
+            <tr>
+                <th>Start</th>
+                <td>{{ completed_job.start }}</td>
+            </tr>
+            <tr>
+                <th>Finish</th>
+                <td>{{ completed_job.finish }}</td>
+            </tr>
+            <tr>
+                <th>Measurement</th>
+                <td>{{ completed_job.measurement }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ completed_job.quantity }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('completed_jobs_index') }}">back to list</a>
+
+    <a href="{{ path('completed_jobs_edit', {'id': completed_job.id}) }}">edit</a>
+
+    {{ include('completed_jobs/_delete_form.html.twig') }}
+{% endblock %}

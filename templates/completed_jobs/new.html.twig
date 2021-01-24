@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CompletedJobs{% endblock %}
+
+{% block body %}
+    {% set current = {'current_place': 'Pridėti darbą'} %}
+    {% include 'header.html.twig' with current %}
+
+    <br>
+    {{ include('completed_jobs/_form.html.twig') }}
+
+{% endblock %}

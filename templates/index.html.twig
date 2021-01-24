@@ -1,0 +1,358 @@
+{% extends 'base.html.twig' %}
+
+
+{% block head %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+  <title>RestShop</title>
+
+{% endblock %}
+
+
+
+  {% block body %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <!-- Header -->
+{% include 'header.html.twig' %}
+    <script>
+      var token = null;
+
+      $(document).ready(function() {
+        token = sessionStorage.getItem("token");
+        if (token == null) {
+
+        } else {
+          getActiveUser();
+          getBuyersOrders();
+          $('#yourCart').attr("style", "background-image: url(https://g4.dcdn.lt/images/pix/shutterstock-192063263-72222790.jpg)");
+        }
+        getProducts();
+
+      });
+
+      function getActiveUser() {
+        var ajaxSendRequest = $.ajax({
+          url: '{{ path('api_get_user') }}',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          type: 'GET',
+          dataType: 'json',
+          async: false,
+        });
+        ajaxSendRequest.done(function (data) {
+          sessionStorage.setItem("userId", data.id);
+          sessionStorage.setItem("userRole", data.role);
+          sessionStorage.setItem("buyerId", data.buyerId);
+          sessionStorage.setItem("orderId", data.orderId);
+        }).fail(function (textStatus, errorThrown) {
+          checkToken(textStatus.responseJSON);
+        });
+      }
+
+
+      function checkToken(data) {
+        if (data.code == '401' && data.message == 'Expired JWT Token') {
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("userId");
+          sessionStorage.removeItem("userRole");
+          sessionStorage.removeItem("orderId");
+          sessionStorage.removeItem("buyerId");
+          location.reload();
+        }
+      }
+
+      function addToCart(id) {
+        buttonas = '#buyButtonInput' + id.toString();
+
+        console.log(buttonas);
+        if (token == null){
+          alert("You have to log in");
+        }
+        if($(buttonas).val()<1){
+          alert("Count cannot be less than 1");
+          return;
+        }
+        else{
+
+          var info = {
+            "product_id": id,
+            "quantity": $(buttonas).val(),
+          }
+          console.log(info);
+          var ajaxSendRequest = $.ajax({
+            url: '{{ path('api_add_item') }}',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            type: 'POST',
+            data: JSON.stringify(info),
+            dataType: 'json',
+            async: false,
+          });
+          ajaxSendRequest.done(function (data) {
+            alert('Item has been added to bag');
+          }).fail(function (textStatus, errorThrown) {
+            checkToken(textStatus.responseJSON);
+          });
+          getProducts();
+          getBuyersOrders()
+          //alert(id);
+        }
+
+      }
+
+
+      function getProducts() {
+        var ajaxSendRequest = $.ajax({
+          url:  window.location.href + "api/product",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          type: 'GET',
+          dataType: 'json',
+          async: false,
+        });
+        ajaxSendRequest.done(function (data) {
+          var products = "          <div class=\"col-md-12\">\n" +
+                  "            <div class=\"section-heading\">\n" +
+                  "              <h2>Featured Products</h2>\n";
+
+          if (sessionStorage.getItem("userRole") == "ADMIN"){
+            products+="<a data-toggle=\"modal\" data-target=\"#modalProductForm\">Add new product<i class=\"fa fa-angle-right\"></i></a>\n"
+          }
+          products+= "            </div>\n" +
+                  "          </div>";
+          for (x in data) {
+            products += '          <div class="col-md-4">\n' +
+                    '            <div class="product-item">\n' +
+                    '              <a><img src="' + data[x].pictureUrl + '" alt=""></a>\n' +
+                    '              <div class="down-content">\n' +
+                    '                <a><h4>'+ data[x].name +'</h4></a>\n' +
+                    '                <h6>' + data[x].price +'€</h6>\n' +
+                    '                <p>'+ data[x].description +'</p>\n' +
+                    '<div class="buyButtonDiv">\n' +
+                    '<div class="row">\n' +
+                    '                <div class="col-6" style="display:flex; align-items:center;">\n' +
+                    '                    <div>Count: </div>&nbsp;\n' +
+                    '                    <input type="number" min="1" step="1" id="buyButtonInput'+ data[x].id +'" style="width:100%; height:100%;">\n' +
+                    '                </div>\n' +
+                    '                <div class="col-6">\n' +
+                    '                    <button onclick="addToCart(' + data[x].id + ')" class="btn btn-primary">Add to cart</button>\n' +
+                    '                </div>\n' +
+                    '            </div>' +
+                    '</div>'+
+                    '              </div>\n' +
+                    '            </div>\n' +
+                    '          </div>';
+          }
+          $('#all-products').html(products);
+        }).fail(function (textStatus, errorThrown) {
+          //checkToken(textStatus.responseJSON);
+        });
+      }
+
+
+
+
+      function getBuyersOrders() {
+        getActiveUser();
+        nonExistant = "          <div class=\"col-md-12\">\n" +
+                "            <div id=\"cartHeading\" class=\"section-heading\">\n" +
+                "              <h2>Your cart is empty</h2>\n" +
+                "            </div>\n" +
+                "          </div>";
+        if (sessionStorage.getItem("orderId") == 'null'){
+          $("#cartRow").html(nonExistant);
+          return;
+        }
+        //console.log("ids:" + ids);
+
+        var ajaxSendRequest = $.ajax({
+          url:  window.location.href + "api/buyer/" + sessionStorage.getItem("buyerId") + "/order/" + sessionStorage.getItem("orderId") +"/item",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          type: 'GET',
+          dataType: 'json',
+          async: false,
+        });
+        ajaxSendRequest.done(function (data) {
+          console.log(data);
+          let totalCartPrice = 0;
+          var cart = "          <div class=\"col-md-12\">\n" +
+                  "            <div id=\"cartHeading\" class=\"section-heading\">\n" +
+                  "              <h2>Your cart</h2>\n" +
+                  "            </div>\n" +
+                  "          </div>";
+          for (x in data){
+            cart += '          <div class="col-lg-4 col-md-6">\n' +
+                    '            <div class="service-item">\n' +
+                    '\n' +
+                    '              <div class="down-content">\n' +
+                    '                <h4><a>'+ data[x].product.name +'</a></h4>\n' +
+                    '\n' +
+                    '                <p style="margin: 0;">'+data[x].product.category+' &nbsp;&nbsp;|&nbsp;&nbsp; ' + data[x].quantity+' pcs &nbsp;&nbsp;|&nbsp;&nbsp; '+ data[x].totalPrice+'€</p>\n' +
+                    '              </div>\n' +
+                    '            </div>\n' +
+                    '          </div>';
+            totalCartPrice+=parseFloat(data[x].totalPrice);
+          }
+
+          var heading = '              <h2>Your cart</h2>\n' +
+                  '            <h5 style="color:white">Total price: '+ totalCartPrice +'€</h5>'
+
+          $("#cartRow").html(cart);
+          $("#cartHeading").html(heading);
+
+        }).fail(function (textStatus, errorThrown) {
+          //checkToken(textStatus.responseJSON);
+        });
+
+
+      }
+
+      function addProduct() {
+
+        var info = {
+          "name": $('#new-product-name').val(),
+          "category": $('#new-product-category').val(),
+          "description": $('#new-product-description').val(),
+          "pictureUrl": $('#new-product-picture').val(),
+          "price": $('#new-product-price').val(),
+        }
+        console.log(info);
+        var ajaxSendRequest = $.ajax({
+          url: '{{ path('api_add_product') }}',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          type: 'POST',
+          data: JSON.stringify(info),
+          dataType: 'json',
+          async: false,
+        });
+        ajaxSendRequest.done(function (data) {
+          $('#modalProductForm').modal('hide');
+          $(".modal-backdrop").remove();
+          alert('The product has been added');
+        }).fail(function (textStatus, errorThrown) {
+          checkToken(textStatus.responseJSON);
+        });
+        getProducts();
+      }
+
+
+    </script>
+
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="banner header-text">
+      <div class="owl-banner owl-carousel">
+        <div class="banner-item-01">
+          <div class="text-content">
+            <h4>Find your car today!</h4>
+            <h2>Lorem ipsum dolor sit amet</h2>
+          </div>
+        </div>
+        <div class="banner-item-02">
+          <div class="text-content">
+            <h4>Fugiat Aspernatur</h4>
+            <h2>Laboriosam reprehenderit ducimus</h2>
+          </div>
+        </div>
+        <div class="banner-item-03">
+          <div class="text-content">
+            <h4>Saepe Omnis</h4>
+            <h2>Quaerat suscipit unde minus dicta</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Banner Ends Here -->
+
+    <div class="latest-products">
+      <div class="container">
+        <div class="modal fade" id="modalProductForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add new product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!--<form onsubmit="addProduct()"> -->
+                  <div class="form-group">
+                    <label for="new-product-name">Name</label>
+                    <input type="text" class="form-control" id="new-product-name" placeholder="Enter nane" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-product-category">Category</label>
+                    <input type="text" class="form-control" id="new-product-category" placeholder="Enter category" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-product-price">Price</label>
+                    <input type="number" min="0.01" step="any" class="form-control" id="new-product-price" placeholder="Enter price" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-product-description">Description</label>
+                    <input type="text" class="form-control" id="new-product-description" placeholder="Enter description" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-product-picture">Picture URL</label>
+                    <input type="text" class="form-control" id="new-product-picture" placeholder="Enter picture URL" required>
+                  </div>
+                  <button onclick="addProduct()" class="btn btn-primary">Submit</button>
+                <!-- </form> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" id="all-products">
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="services" id="yourCart" style="background-image: url(https://g4.dcdn.lt/images/pix/shutterstock-192063263-72222790.jpg); display: none;" >
+      <div class="container">
+        <div class="row" id="cartRow">
+
+
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="inner-content">
+              <p>Copyright © 2020 Armandas Aidulis</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+</html>
+ {% endblock %}

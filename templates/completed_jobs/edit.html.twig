@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CompletedJobs{% endblock %}
+
+{% block body %}
+    {% set current = {'current_place': 'Redaguoti darbą'} %}
+    {% include 'header.html.twig' with current %}
+
+    {{ include('completed_jobs/_form.html.twig', {'button_label': 'Atnaujinti'}) }}
+
+
+{% endblock %}

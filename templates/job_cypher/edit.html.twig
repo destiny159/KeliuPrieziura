@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit JobCypher{% endblock %}
+
+{% block body %}
+    {% set current = {'current_place': 'Keisti šifrą'} %}
+    {% include 'header.html.twig' with current %}
+
+    <br>
+
+    {{ include('job_cypher/_form.html.twig', {'button_label': 'Atnaujinti'}) }}
+
+{% endblock %}

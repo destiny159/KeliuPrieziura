@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('completed_jobs_delete', {'id': completed_job.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ completed_job.id) }}">
+    <button class="fas fa-trash-alt">Ištrinti</button>
+</form>

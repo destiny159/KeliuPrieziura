@@ -1,0 +1,11 @@
+DATABASE_URL=mysql://root:secret@mysql:3306/keliuprieziura
+
+INSERT INTO `road_section` (`id`, `road_number`, `road_name`, `road_start`, `road_finish`, `road_level`, `road_type`) VALUES (NULL, 'A1', 'Vilnius–Kaunas–Klaipėda', '10', '70', '1', 'Asfaltas');
+INSERT INTO `road_section` (`id`, `road_number`, `road_name`, `road_start`, `road_finish`, `road_level`, `road_type`) VALUES (NULL, 'A1', 'Vilnius–Kaunas–Klaipėda', '70', '129.5', '1', 'Asfaltas');
+INSERT INTO `road_section` (`id`, `road_number`, `road_name`, `road_start`, `road_finish`, `road_level`, `road_type`) VALUES (NULL, 'A1', 'Vilnius–Kaunas–Klaipėda', '129.5', '190', '1', 'Asfaltas');
+INSERT INTO `road_section` (`id`, `road_number`, `road_name`, `road_start`, `road_finish`, `road_level`, `road_type`) VALUES (NULL, 'A1', 'Vilnius–Kaunas–Klaipėda', '190', '250', '1', 'Asfaltas');
+INSERT INTO `road_section` (`id`, `road_number`, `road_name`, `road_start`, `road_finish`, `road_level`, `road_type`) VALUES (NULL, 'A1', 'Vilnius–Kaunas–Klaipėda', '250', '306.234', '1', 'Asfaltas')
+
+INSERT INTO `job_cypher` (`id`, `cypher`, `name`, `measurement`) VALUES (NULL, 'KP2-1-28-1', 'Žolės pjovimas', 'km');
+INSERT INTO `job_cypher` (`id`, `cypher`, `name`, `measurement`) VALUES (NULL, 'KP10-1-10', 'Kelio barstymas frikcinėmis medžiagomis, esant slidumams', 'km');
+INSERT INTO `job_cypher` (`id`, `cypher`, `name`, `measurement`) VALUES (NULL, 'KP10-1-11', 'Takų barstymas frikcinėmis medžiagomis, esant slidumams', 'km');
