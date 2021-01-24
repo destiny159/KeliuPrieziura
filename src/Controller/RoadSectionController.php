@@ -51,16 +51,6 @@ class RoadSectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="road_section_show", methods={"GET"})
-     */
-    public function show(RoadSection $roadSection): Response
-    {
-        return $this->render('road_section/show.html.twig', [
-            'road_section' => $roadSection,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="road_section_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, RoadSection $roadSection): Response

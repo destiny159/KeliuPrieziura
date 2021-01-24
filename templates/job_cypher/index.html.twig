@@ -1,122 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}JobCypher index{% endblock %}
+{% block title %}Darbų šifrai{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
 
-    <style>
-        .styled-table {
-            border-collapse: collapse;
-            margin: 25px 0;
-            font-size: 0.9em;
-            font-family: sans-serif;
-            min-width: 400px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-        }
-        .styled-table thead tr {
-            background-color: #009879;
-            color: #ffffff;
-            text-align: left;
-        }
-        .styled-table th,
-        .styled-table td {
-            padding: 12px 15px;
-        }
-        .styled-table tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
-
-        .styled-table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-
-        .styled-table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
-        }
-
-        .styled-table tbody tr:hover {
-            font-weight: bold;
-            color: #009879;
-        }
-
-        .box{
-            position:absolute;
-            top:50%;
-            left:50%;
-            transform : translate(-50% ,-50%);
-        }
-
-        .btn:link,
-        .btn:visited{
-            text-decoration: none;
-            text-transform:uppercase;
-            position:relative;
-            top:0;
-            left:0;
-            padding:20px 40px;
-            border-radius:100px;
-            display:inline-block;
-            transition: all .5s;
-            width: 100%;
-            background-color: #009879;
-            color: white;
-        }
-
-        .btn-green{
-            background:#009879;
-            color:#000;
-        }
-
-        .btn:hover{
-            box-shadow:0px 10px 10px rgba(0,0,0,0.2);
-            transform : translateY(-3px);
-        }
-
-        .btn:active{
-            box-shadow:0px 5px 10px rgba(0,0,0,0.2)
-            transform:translateY(-1px);
-        }
-
-        .btn-bottom-animation-1{
-            animation:comeFromBottom 1s ease-out .8s;
-        }
-
-        .btn::after{
-            content:"";
-            text-decoration: none;
-            text-transform:uppercase;
-            position:absolute;
-            width:100%;
-            height:100%;
-            top:0;
-            left:0;
-            border-radius:100px;
-            display:inline-block;
-            z-index:-1;
-            transition: all .5s;
-        }
-
-        .btn-white::after {
-            background: #fff;
-        }
-
-        .btn-animation-1:hover::after {
-            transform: scaleX(1.4) scaleY(1.6);
-            opacity: 0;
-        }
-
-        @keyframes comeFromBottom {
-            0% {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
@@ -124,7 +13,7 @@
     {% set current = {'current_place': 'Darbų šifrai'} %}
     {% include 'header.html.twig' with current %}
 <div style="margin: 10px 10px 10px 10px">
-    <a class="btn" href="{{ path('job_cypher_new') }}">Pridėti naują šifrą</a>
+    <a class="btn btnas" href="{{ path('job_cypher_new') }}">Pridėti naują šifrą</a>
     <br>
     <table class="styled-table" style="width: 100%">
         <thead>
@@ -142,7 +31,7 @@
                 <td>{{ job_cypher.name }}</td>
                 <td>{{ job_cypher.measurement }}</td>
                 <td>
-                    <a class="fas fa-edit" href="{{ path('job_cypher_edit', {'id': job_cypher.id}) }}">Redaguoti</a>
+                    <a class="btn btn-light fas fa-edit" href="{{ path('job_cypher_edit', {'id': job_cypher.id}) }}">Redaguoti</a>
                     {{ include('job_cypher/_delete_form.html.twig') }}
                 </td>
             </tr>

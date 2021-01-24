@@ -27,37 +27,6 @@ class CompletedJobsController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/new", name="completed_jobs_new", methods={"GET","POST"})
-//     */
-//    public function new(Request $request, RoadSectionRepository $roadSectionRepository): Response
-//    {
-//        $completedJob = new CompletedJobs();
-//        $form = $this->createForm(CompletedJobsType::class, $completedJob);
-//        $form->handleRequest($request);
-//
-//
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $job = $form->get('job')->getData();
-//            $jobcypher = explode('; ', $job)[0];
-//            $jobname = explode('; ', $job)[1];
-//
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $completedJob->setJobCypher($jobcypher);
-//            $completedJob->setJobName($jobname);
-//            $entityManager->persist($completedJob);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('completed_jobs_index');
-//        }
-//
-//        return $this->render('completed_jobs/new.html.twig', [
-//            'completed_job' => $completedJob,
-//            'form' => $form->createView(),
-//        ]);
-//    }
-
 
     /**
      * @Route("/new", name="completed_jobs_new", methods={"GET","POST"})
@@ -78,9 +47,14 @@ class CompletedJobsController extends AbstractController
             $quantity = $form->get('quantity')->getData();
             $start = $form->get('start')->getData();
             $finish = $form->get('finish')->getData();
+
+            if ($start > $finish){
+                $middle = $start;
+                $start = $finish;
+                $finish = $middle;
+            }
             $roadNumber = explode(' ',$form->get('roadName')->getData())[0];
             $jobas = $jobCypherRepository->findOneBy(['cypher' => $jobcypher]);
-            //$measurement = $form->get('measurement')->getData();
 
             $measurement = $jobas->getMeasurement();
 
@@ -156,16 +130,6 @@ class CompletedJobsController extends AbstractController
         return $this->render('completed_jobs/new.html.twig', [
             'completed_job' => $completedJob,
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="completed_jobs_show", methods={"GET"})
-     */
-    public function show(CompletedJobs $completedJob): Response
-    {
-        return $this->render('completed_jobs/show.html.twig', [
-            'completed_job' => $completedJob,
         ]);
     }
 

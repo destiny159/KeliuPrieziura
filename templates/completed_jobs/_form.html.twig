@@ -1,18 +1,6 @@
-<style>
-    .button {
-        background-color: #009879;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        width: 100%;
-    }
-</style>
+{% block stylesheets %}
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+{% endblock %}
 
 <div class="container-fluid">
     <div class="row">
@@ -92,24 +80,8 @@
 <script>
     var roadlist = [];
     $(document).ready(function() {
+        $("#completed_jobs_quantity").attr('step', '0.001')
     });
-
-    function getRoads() {
-        var ajaxSendRequest = $.ajax({
-            url:  '{{ path('get_roads') }}',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            type: 'GET',
-            dataType: 'json',
-            async: false,
-        });
-        ajaxSendRequest.done(function (data) {
-            roadlist = data;
-        }).fail(function (textStatus, errorThrown) {
-
-        });
-    }
 
 
         $("#completed_jobs_job").autocomplete({

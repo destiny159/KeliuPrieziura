@@ -49,16 +49,6 @@ class JobCypherController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="job_cypher_show", methods={"GET"})
-     */
-    public function show(JobCypher $jobCypher): Response
-    {
-        return $this->render('job_cypher/show.html.twig', [
-            'job_cypher' => $jobCypher,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="job_cypher_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, JobCypher $jobCypher): Response
